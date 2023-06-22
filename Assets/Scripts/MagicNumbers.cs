@@ -5,41 +5,44 @@ using UnityEngine;
 public class MagicNumbers : MonoBehaviour
 {
 
-    private int _min;
-    private int _max;
+    public int Min = 1;
+    public int Max = 1000;
     private int _guess;
     void Start()
     {
         Debug.Log("Hello");
-        _min = 1;
-        _max = 1000;
-        Debug.Log($"Загодай число от {_min} до {_max}");
+        Debug.Log($"Загодай число от {Min} до {Max}");
         CalculateGuess();
-        Debug.Log($"Твоё число {_guess}");
+        AskAboutGuess();
     }
     
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            _max = _guess;
+            Max = _guess;
             CalculateGuess();
-            Debug.Log($"Твоё число {_guess}");
+            AskAboutGuess();
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            _min = _guess;
+            Min = _guess;
             CalculateGuess();
-            Debug.Log($"Твоё число {_guess}");
+            AskAboutGuess();
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log($"Угадал твое чилсо {_guess}");
         }
     }
+    
+    private void AskAboutGuess()
+    {
+        Debug.Log($"Твоё число {_guess}?");
+    }
 
     private void CalculateGuess()
     {
-        _guess = (_min + _max) / 2;
+        _guess = (Min + Max) / 2;
     }
 }
