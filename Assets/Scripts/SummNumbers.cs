@@ -6,19 +6,25 @@ using UnityEngine.SceneManagement;
 
 public class SummNumbers : MonoBehaviour
 {
+    #region Variables
+
     public TMP_Text TextGame;
-    private int _summ;
-    private int _numberOfAttempts;
     private bool _isWin;
- 
+    private int _numberOfAttempts;
+    private int _summ;
+
+    #endregion
+
+    #region Unity lifecycle
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _summ = 0;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (!_isWin)
         {
@@ -39,7 +45,8 @@ public class SummNumbers : MonoBehaviour
         }
         else
         {
-            TextGame.text = $"Сумма:{_summ}. Игра окончена! Количество ходов: {_numberOfAttempts}. Нажми пробел для рестарта.";
+            TextGame.text =
+                $"Сумма:{_summ}. Игра окончена! Количество ходов: {_numberOfAttempts}. Нажми пробел для рестарта.";
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && _isWin)
@@ -47,7 +54,6 @@ public class SummNumbers : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
- 
-    
- 
+
+    #endregion
 }
