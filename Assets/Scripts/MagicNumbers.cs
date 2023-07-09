@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using DefaultNamespace;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +8,11 @@ public class MagicNumbers : MonoBehaviour
 {
     #region Variables
 
+    public Button BelowButton;
+    public Button GuessButton;
+    public TMP_Text GuessLabel;
+    public Button HigherButton;
+
     public int Max = 1000;
     public int Min = 1;
     public TMP_Text RulesFirstGame;
@@ -16,8 +20,6 @@ public class MagicNumbers : MonoBehaviour
     private int _guess;
     private bool _isWin;
     private int _numberOfAttempts;
-    private readonly float maxTime = 5;
-    private float timer;
 
     #endregion
 
@@ -30,42 +32,10 @@ public class MagicNumbers : MonoBehaviour
         CalculateGuess();
         _numberOfAttempts = 1;
         AskAboutGuess();
-    }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.DownArrow) && !_isWin)
-        {
-            Max = _guess;
-            CalculateGuess();
-            AskAboutGuess();
-            _numberOfAttempts++;
-        }
-
-        if (Input.GetKeyDown(KeyCode.UpArrow) && !_isWin)
-        {
-            Min = _guess;
-            CalculateGuess();
-            AskAboutGuess();
-            _numberOfAttempts++;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && !_isWin)
-        {
-            TextGame.text =
-                $"Угадал твое чилсо {_guess}. Попыток - {_numberOfAttempts}. Через {maxTime} секунд игра перезапустится";
-            _isWin = true;
-        }
-
-        if (_isWin)
-        {
-            timer += Time.deltaTime;
-
-            if (timer > maxTime)
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
-        }
+        HigherButton.onClick.AddListener(OnHigherButtonClicked);
+        GuessButton.onClick.AddListener(OnGuessButtonClicked);
+        BelowButton.onClick.AddListener(OnBelowButtonClicked);
     }
 
     #endregion
@@ -80,6 +50,47 @@ public class MagicNumbers : MonoBehaviour
     private void CalculateGuess()
     {
         _guess = (Min + Max) / 2;
+    }
+
+    private void OnBelowButtonClicked()
+    {
+        if (_isWin)
+        {
+            return;
+        }
+
+        Max = _guess;
+        CalculateGuess();
+        AskAboutGuess();
+        _numberOfAttempts++;
+    }
+
+    private void OnGuessButtonClicked()
+    {
+        if (_isWin)
+        {
+            SceneManager.LoadScene(SceneName.Win);
+        }
+
+        TextGame.text =
+            $"Угадал твое чилсо {_guess}. Попыток - {_numberOfAttempts}.";
+        _isWin = true;
+        Destroy(HigherButton.gameObject);
+        Destroy(BelowButton.gameObject);
+        GuessLabel.text = "Exit";
+    }
+
+    private void OnHigherButtonClicked()
+    {
+        if (_isWin)
+        {
+            return;
+        }
+
+        Min = _guess;
+        CalculateGuess();
+        AskAboutGuess();
+        _numberOfAttempts++;
     }
 
     #endregion
